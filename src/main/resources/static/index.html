@@ -49,20 +49,18 @@
             const messageInput = document.getElementById('message-input');
             const chatMessages = document.getElementById('chat-messages');
 
-            let conversationId = ""; // Initialize conversationId as an empty string
+            let conversationId = "";
 
             chatForm.addEventListener('submit', async function(e) {
                 e.preventDefault();
                 const message = messageInput.value;
+
                 if (!message) return;
 
-                // Add user message to chat
                 addMessageToChat('User', message);
 
-                // Clear input
                 messageInput.value = '';
 
-                // Send message to server
                 try {
                     const botMessageElement = addMessageToChat('Bot', '');
                     const contentElement = botMessageElement.querySelector('.message-content');
