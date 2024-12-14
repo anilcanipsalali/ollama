@@ -3,7 +3,10 @@ package com.anilcanipsalali.ollama.web.controller;
 import com.anilcanipsalali.ollama.service.ChatService;
 import com.anilcanipsalali.ollama.web.model.ChatRequest;
 import com.anilcanipsalali.ollama.web.model.ChatResponse;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 
 @RestController
