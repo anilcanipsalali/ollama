@@ -10,14 +10,14 @@ public class ChatController {
 
     private final ChatClient chatClient;
 
-    public ChatController(ChatClient.Builder chatClientBuilder) {
-        this.chatClient = chatClientBuilder.build();
+    public ChatController(ChatClient.Builder builder) {
+        this.chatClient = builder.build();
     }
 
     @PostMapping("/chat")
-    private String chat(@RequestParam String userInput) {
-        return this.chatClient.prompt()
-                .user(userInput)
+    public String chat(@RequestParam String message) {
+        return chatClient.prompt()
+                .user(message)
                 .call()
                 .content();
     }
