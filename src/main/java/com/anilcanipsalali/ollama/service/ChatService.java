@@ -3,6 +3,7 @@ package com.anilcanipsalali.ollama.service;
 import com.anilcanipsalali.ollama.web.model.ChatRequest;
 import com.anilcanipsalali.ollama.web.model.ChatResponse;
 import io.micrometer.common.util.StringUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.client.advisor.PromptChatMemoryAdvisor;
@@ -16,6 +17,7 @@ import java.util.UUID;
 import static org.springframework.ai.chat.client.advisor.AbstractChatMemoryAdvisor.CHAT_MEMORY_CONVERSATION_ID_KEY;
 import static org.springframework.ai.chat.client.advisor.AbstractChatMemoryAdvisor.CHAT_MEMORY_RETRIEVE_SIZE_KEY;
 
+@Slf4j
 @Service
 public class ChatService {
 
@@ -49,11 +51,7 @@ public class ChatService {
         return ChatResponse.builder().response(content).conversationId(chatRequest.getConversationId()).build();
     }
 
-    public Flux<ChatResponse> chatStream(ChatRequest chatRequest) {
-        if (StringUtils.isEmpty(chatRequest.getConversationId())) {
-            chatRequest.setConversationId(UUID.randomUUID().toString());
-        }
-
+    public Flux<String> chatStream(ChatRequest chatRequest) {
         return chatClient.prompt()
                 .user(chatRequest.getMessage())
                 .advisors(advisorSpec -> advisorSpec
@@ -61,10 +59,6 @@ public class ChatService {
                         .param(CHAT_MEMORY_RETRIEVE_SIZE_KEY, chatMemoryRetrieveSizeKey)
                 )
                 .stream()
-                .content()
-                .map(content -> ChatResponse.builder()
-                        .response(content)
-                        .conversationId(chatRequest.getConversationId())
-                        .build());
+                .content();
     }
 }

@@ -49,7 +49,7 @@
             const messageInput = document.getElementById('message-input');
             const chatMessages = document.getElementById('chat-messages');
 
-            let conversationId = "";
+            const conversationId = generateUUID();
 
             chatForm.addEventListener('submit', async function(e) {
                 e.preventDefault();
@@ -100,22 +100,7 @@
                     while (true) {
                         const { done, value } = await reader.read();
                         if (done) break;
-
-                        const chunk = decoder.decode(value, { stream: true });
-
-                        try {
-                            const chatResponses = JSON.parse(chunk);
-                            chatResponses.forEach((chatResponse) => {
-                                contentElement.innerHTML += chatResponse.response;
-                                if (chatResponse.conversationId) {
-                                    conversationId = chatResponse.conversationId;
-                                }
-                            });
-                        } catch (err) {
-                            console.error('Error processing stream:', error);
-                            contentElement.innerHTML += '<br>[Error: Stream interrupted. Please try again.]';
-                        }
-
+                        contentElement.innerHTML += decoder.decode(value, { stream: true });
                         chatMessages.scrollTop = chatMessages.scrollHeight;
                     }
                 } catch (error) {
@@ -134,6 +119,14 @@
                 chatMessages.appendChild(messageElement);
                 chatMessages.scrollTop = chatMessages.scrollHeight;
                 return messageElement;
+            }
+
+            function generateUUID() {
+              return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (char) {
+                const random = Math.random() * 16 | 0;
+                const value = char === 'x' ? random : (random & 0x3 | 0x8);
+                return value.toString(16);
+              });
             }
         </script>
     </body>

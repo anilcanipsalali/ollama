@@ -25,7 +25,7 @@ public class ChatController {
     }
 
     @PostMapping("/stream")
-    public Flux<ChatResponse> chatWithStream(@RequestBody ChatRequest chatRequest) {
+    public Flux<String> chatWithStream(@RequestBody ChatRequest chatRequest) {
         return chatService.chatStream(chatRequest);
     }
 }
